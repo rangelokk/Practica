@@ -9,3 +9,5 @@ https://gurpreet-ai.github.io/real-time-object-detection-with-pre-trained-YOLOv3
 https://www.geeksforgeeks.org/object-detection-with-yolo-and-opencv/?ref=ml_lbp
 5) В этом проекте реализован классификатор обнаружения объектов на изображениях и видео в режиме реального времени с использованием предварительно обученных моделей yolov3.
 https://github.com/iArunava/YOLOv3-Object-Detection-with-OpenCV
+6) *Про Yolo и ее установку и обучение*  
+https://github.com/AlexeyAB/darknet?tab=readme-ov-file#how-to-train-to-detect-your-custom-objects
