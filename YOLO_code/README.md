@@ -13,3 +13,17 @@ https://github.com/iArunava/YOLOv3-Object-Detection-with-OpenCV
 https://github.com/AlexeyAB/darknet?tab=readme-ov-file#how-to-train-to-detect-your-custom-objects
 7) Разметка изображений  
 https://github.com/AlexeyAB/Yolo_mark  
+8) Как быстро создать обучающий датасет для задач обнаружения объектов YOLO с помощью Label Studio
+https://habr.com/ru/articles/670532/
+9) Как подготовить данные для обучения нейросети
+https://www.freecodecamp.org/news/how-to-detect-objects-in-images-using-yolov8/
+10) Сегментация в Yolo
+https://docs.ultralytics.com/ru/tasks/segment/#export
+11) Сегментация в YoloV3
+https://cuda-chen.github.io/programming/2019/12/07/image-segmentation-with-YOLOv3-and-GrabCut.html
+12) Как на своих данных обучить нейросеть(с кодом)
+https://develop-nil.com/kak-sozdat-svoj-sobstvennyj-object-detector/
+13) Тренировка нейросети
+https://docs.ultralytics.com/ru/yolov5/tutorials/train_custom_data/#supported-environments
+14) Инфа про YoloV3 на Гикс
+https://www.geeksforgeeks.org/yolov3-from-scratch-using-pytorch/
