@@ -7,15 +7,16 @@ import numpy as np
 from cv_bridge import CvBridge
 
 def recognize(image_np):
-        width = 300
-        height = 300
+        #Исправлено
+        width = 640
+        height = 480
         net = cv2.dnn.readNet("/home/mlserver/darknet2/yolov3.weights", "/home/mlserver/darknet2/cfg/yolov3.cfg")
         classes = []
         with open("/home/mlserver/darknet2/data/coco.names", "r") as f:
             classes = [line.strip() for line in f.readlines()]
         layer_names = net.getLayerNames()
         output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
-
+        #преобразование в формат с которым может работать yolo v3
         blob = cv2.dnn.blobFromImage(image_np, 0.00392, (416,416),(0, 0, 0), True, crop=False)
         net.setInput(blob)
         outs = net.forward(output_layers)
@@ -28,6 +29,7 @@ def recognize(image_np):
                 scores = detection[5:]
                 class_id = np.argmax(scores)
                 confidence = scores[class_id]
+                #Если вероятность того, что это именно этот объект выше чем 50% то выводим
                 if confidence > 0.5:
                     center_x = int(detection[0] * width)
                     center_y = int(detection[1] * height)
