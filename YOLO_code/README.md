@@ -11,3 +11,5 @@ https://www.geeksforgeeks.org/object-detection-with-yolo-and-opencv/?ref=ml_lbp
 https://github.com/iArunava/YOLOv3-Object-Detection-with-OpenCV
 6) *Про Yolo и ее установку и обучение*  
 https://github.com/AlexeyAB/darknet?tab=readme-ov-file#how-to-train-to-detect-your-custom-objects
+7) Разметка изображений  
+https://github.com/AlexeyAB/Yolo_mark  
