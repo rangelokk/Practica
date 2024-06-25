@@ -5,9 +5,10 @@ import cv2
 from sensor_msgs.msg import Image
 import numpy as np
 from cv_bridge import CvBridge
-i=0
+count=0
 
 def recognize(image_np):
+        global count
         width = 640
         height = 480
         net = cv2.dnn.readNet("/home/mlserver/darknet/backup/yolo-obj_best.weights", "/home/mlserver/darknet/yolo-obj.cfg")
@@ -57,16 +58,19 @@ def recognize(image_np):
                 # apply GrabCut
                 cv2.grabCut(image, mask, rect, bgdModel, fgbModel, 5, cv2.GC_INIT_WITH_RECT)
                 mask2 = np.where((mask == 2) | (mask == 0), 0, 1).astype('uint8')
-                image_np = image_np * mask2[:, :, np.newaxis]
+                image = image * mask2[:, :, np.newaxis]
+                cv2.imwrite('/home/mlserver/dataset/Segmented/s'+str(count)+'.png', image)
+                count += 1
 
                 label = str(classes[class_ids[i]]) #+ " x: " + str(x+w/2) + "y: " + str(y+h/2)
                 color = (255, 255, 0)#colors[i]
                 cv2.rectangle(image_np, (x,y), (x + w, y + h), color, 2)
                 cv2.putText(image_np, label, (x, y + 30), font, 3, color, 3)
-
+        '''
         if(len(boxes)!=0):
-            cv2.imwrite('/home/mlserver/dataset/Segmented/s'+str(i)+'.png', image_np)
-            i += 1
+            cv2.imwrite('/home/mlserver/dataset/Segmented/s'+str(count)+'.png', image_np)
+            count += 1
+        '''
         cv2.imshow("img", image_np)
         cv2.waitKey(1)
 
@@ -102,7 +106,6 @@ class MinimalSubscriber(Node):
     
 
 def main(args=None):
-    
     rclpy.init(args=args)
 
     minimal_subscriber = MinimalSubscriber()
