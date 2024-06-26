@@ -18,10 +18,10 @@ class Multiply_Subscriber(Node):
             depth=5
         )
         self.image = Subscriber(
-            '/camera/rgb/image_raw',
-            Image,
-            qos_profile=qos_profile_i,
-            queue_size=10)
+            topic ='/camera/rgb/image_raw',
+            msg_type = Image,
+            qos_profile=qos_profile_i
+            )
         
         qos_profile_d = QoSProfile(
             reliability=QoSReliabilityPolicy.RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT,
@@ -29,10 +29,10 @@ class Multiply_Subscriber(Node):
             depth=5
         )
         self.depth = Subscriber(
-            '/camera/depth_registered/points',
-            PointCloud2,
-            qos_profile=qos_profile_d,
-            queue_size=10)
+            topic = '/camera/depth_registered/points',
+            msg_type = PointCloud2,
+            qos_profile=qos_profile_d
+            )
         
         ts = TimeSynchronizer([self.image, self.depth], 10)
         ts.registerCallback(self.Callback)
