@@ -3,6 +3,20 @@ https://github.com/IntelRealSense/realsense-ros/issues/1342
 Камера ее название:
 https://github.com/mgonzs13/ros2_asus_xtion
 
+
+
+class message_filters.Subscriber(*args, **kwargs)
+
+    ROS subscription filter. Identical arguments as rospy.Subscriber.
+
+    This class acts as a highest-level filter, simply passing messages from a ROS subscription through to the filters which have connected to it.
+
+    registerCallback(cb, *args)
+
+        Register a callback function cb to be called when this filter has output. The filter calls the function cb with a filter-dependent list of arguments, followed by the call-supplied arguments args.
+
+
+
 ```
 from rclpy.node import Node
 from rclpy.qos import QoSProfile
