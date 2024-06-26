@@ -3,6 +3,7 @@ https://github.com/IntelRealSense/realsense-ros/issues/1342
 Камера ее название:
 https://github.com/mgonzs13/ros2_asus_xtion
 
+```
 from rclpy.qos import QoSProfile
 from rclpy.qos import QoSHistoryPolicy, QoSReliabilityPolicy
 from sensor_msgs.msg import Image, PointCloud2
@@ -38,3 +39,4 @@ class Multiply_Subscriber(Node):
 
     def Callback(self, img_msg, dep_msg):
         self.get_logger().info('Multi msg')
+```
