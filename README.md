@@ -194,3 +194,46 @@ data = # ваше облако точек
 segment_and_visualize_pointcloud(data)
 #Пожалуйста, убедитесь, что вы передаете правильные данные в функцию segment_and_visualize_pointcloud, и что данные соответствуют ожидаемому формату для корректной работы функции.
 ```
+7) Аанг не сдался - и я не сдамся!
+Для выполнения задачи сегментации изображения, которое появляется на экране в результате отработки функции, вам нужно будет загрузить и обработать это изображение, а затем сопоставить его с другими сегментированными изображениями.
+```
+import os
+import cv2
+import open3d as o3d
+
+def segment_and_match(segmented_image_path):
+    # Загрузка изображения для сегментации
+    image = cv2.imread(segmented_image_path)
+
+    # Сегментация изображения (пример)
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    _, binary_image = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+    # Загрузка других сегментированных изображений для сопоставления (пример)
+    segmented_images_folder = '/home/mlserver/dataset/Segmented'
+    segmented_images = []
+    for filename in os.listdir(segmented_images_folder):
+        if filename.endswith('.png'):
+            segmented_image = cv2.imread(os.path.join(segmented_images_folder, filename))
+            segmented_images.append(segmented_image)
+
+    # Сопоставление сегментированного изображения с другими изображениями (пример)
+    for seg_img in segmented_images:
+        # Действия по сопоставлению изображений
+        pass
+
+    # Отображение результатов в окне Open3D
+    vis = o3d.visualization.Visualizer()
+    vis.create_window()
+    
+    # Добавление вашего изображения и других сегментированных изображений в окно Open3D
+    vis.add_geometry(o3d.geometry.Image(image))
+    for seg_img in segmented_images:
+        vis.add_geometry(o3d.geometry.Image(seg_img))
+
+    vis.run()
+
+# Пример использования функции для сегментации и сопоставления изображения
+segmented_image_path = '/path/to/your/image.png'
+segment_and_match(segmented_image_path)
+```
