@@ -156,7 +156,7 @@ def segment_pointcloud(data):
 data = # ваше облако точек
 segmented_image = segment_pointcloud(data)
 ```
-6) Буду больше делать попыток!!!
+6) Буду делать больше попыток!!!
 ```
 import rclpy
 import open3d as o3d
