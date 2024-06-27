@@ -91,3 +91,39 @@ def segment_and_visualize_images_from_pointcloud(pointcloud_data, segmented_imag
     vis.run()
     vis.destroy_window()
 ```
+4) Еще одна проба сегментации
+```
+import os
+import cv2
+
+def segment_and_save_images(input_folder, output_folder):
+    # Создание выходной папки, если она не существует
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    for filename in os.listdir(input_folder):
+        if filename.endswith(".png"):
+            image_path = os.path.join(input_folder, filename)
+            segmented_image = cv2.imread(image_path)
+
+            # Ваш код для сегментации изображения
+            # Например, используйте алгоритмы компьютерного зрения или нейронные сети для сегментации
+
+            # Сохранение сегментированного изображения в выходную папку
+            output_path = os.path.join(output_folder, filename)
+            cv2.imwrite(output_path, segmented_image)
+
+    print("Сегментация и сохранение завершены.")
+
+# Путь к папке с исходными изображениями
+input_folder = "/home/mlserver/dataset/Segmented"
+# Путь к папке для сохранения сегментированных изображений
+output_folder = "/path/to/output/folder"
+
+# Вызов функции для сегментации и сохранения изображений
+segment_and_save_images(input_folder, output_folder)
+
+#Прежде чем использовать этот код, убедитесь, что у вас есть необходимые библиотеки (например, OpenCV)
+#и что вы дополните функцию segment_and_save_images соответствующим кодом для сегментации изображений.
+
+```
