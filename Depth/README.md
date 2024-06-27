@@ -4,7 +4,7 @@ https://github.com/IntelRealSense/realsense-ros/issues/1342
 https://github.com/mgonzs13/ros2_asus_xtion
 
 https://stackoverflow.com/questions/65774814/adding-new-points-to-point-cloud-in-real-time-open3d
-
+```
 self.vis = o3d.visualization.Visualizer()
 self.vis.create_window(height=480, width=640)
 self.pcd = o3d.geometry.PointCloud()
@@ -23,3 +23,4 @@ def multi_callback(self, img_msg, dep_msg):
         self.vis.update_geometry(self.pcd)
         self.vis.poll_events()
         self.vis.update_renderer()
+```
