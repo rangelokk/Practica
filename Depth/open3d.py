@@ -1,4 +1,5 @@
 #27 июня
+
 import rclpy
 from rclpy.node import Node
 import cv2
@@ -13,7 +14,8 @@ from sensor_msgs_py import point_cloud2
 import numpy as np
 from cv_bridge import CvBridge
 import open3d as o3d
-#import ros_numpy
+from ctypes import *
+
 count=0
 
 
@@ -62,18 +64,18 @@ def recognize(image_np):
                 x,y,w,h = boxes[i]
 
                 image = image_np.copy()
+
                 mask = np.zeros(image_np.shape[:2], np.uint8)
                 bgdModel = np.zeros((1, 65), np.float64)
                 fgbModel = np.zeros((1, 65), np.float64)
-                # extract the bounding box coordinates
                 rect = boxes[i]
-                # apply GrabCut
                 cv2.grabCut(image, mask, rect, bgdModel, fgbModel, 5, cv2.GC_INIT_WITH_RECT)
                 mask2 = np.where((mask == 2) | (mask == 0), 0, 1).astype('uint8')
                 image = image * mask2[:, :, np.newaxis]
+                '''
                 cv2.imwrite('/home/mlserver/dataset/Segmented/s'+str(count)+'.png', image) #для сохранения сегментированных изобр в реал.времени
                 count += 1
-
+                '''
                 label = str(classes[class_ids[i]]) #+ " x: " + str(x+w/2) + "y: " + str(y+h/2)
                 color = (255, 255, 0)#colors[i]
                 cv2.rectangle(image_np, (x,y), (x + w, y + h), color, 2)
@@ -81,47 +83,32 @@ def recognize(image_np):
         cv2.imshow("img", image_np)
         cv2.waitKey(1)
 
-class ImageSubscriber(Node):
-    i =0
-    framerate = 7
-    def __init__(self):
-        super().__init__('image_subscriber')
-        Qos_profile = QoSProfile(
-            reliability=QoSReliabilityPolicy.RMW_QOS_POLICY_RELIABILITY_RELIABLE,
-            history=QoSHistoryPolicy.RMW_QOS_POLICY_HISTORY_KEEP_LAST,
-            depth=5
-        )
-        self.subscription = self.create_subscription(
-            Image,
-            '/camera/rgb/image_raw',
-            self.image_callback,
-            qos_profile=Qos_profile)
-        self.subscription  # prevent unused variable warning
-    def image_callback(self, msg):
-        self.get_logger().info('Image msg')
-  
-        bridge = CvBridge()
-        image_np = bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
-        
-        recognize(image_np)
 
-        cv2.imshow("img", image_np)
-        '''
-        Для съемок
-        if(self.i%self.framerate==0):
-            cv2.imwrite('/home/mlserver/dataset/m2_Sponge/ms2'+str(self.i/self.framerate)+'.png', image_np)
-        self.i += 1
-        '''
-        cv2.waitKey(1)
-
-
+convert_rgbUint32_to_tuple = lambda rgb_uint32: (
+    (rgb_uint32 & 0x00ff0000)>>16, (rgb_uint32 & 0x0000ff00)>>8, (rgb_uint32 & 0x000000ff)
+)
+convert_rgbFloat_to_tuple = lambda rgb_float: convert_rgbUint32_to_tuple(
+    int(cast(pointer(c_float(rgb_float)), POINTER(c_uint32)).contents.value)
+)
 def pointcloud2_to_open3d(data):
-        points = []
-        for p in point_cloud2.read_points(data, field_names=("x", "y", "z"), skip_nans=True):
-            points.append([p[0], p[1], p[2]])
-        point_cloud = o3d.geometry.PointCloud()
-        point_cloud.points = o3d.utility.Vector3dVector(points)
-        return point_cloud
+    field_names=[field.name for field in data.fields]
+    cloud_data = list(point_cloud2.read_points(data, skip_nans=True, field_names = field_names))
+    xyz = [(x,y,z) for x,y,z,rgb in cloud_data ]
+    
+    point_cloud = o3d.geometry.PointCloud()
+    point_cloud.points = o3d.utility.Vector3dVector(np.array(xyz))
+    if "rgb" in field_names:
+        rgb = [convert_rgbFloat_to_tuple(rgb) for x,y,z,rgb in cloud_data ]
+    point_cloud.colors = o3d.utility.Vector3dVector(np.asarray(rgb)/255.0)
+    
+    return point_cloud
+
+# Преобразование цветов в формат RGB
+    '''
+    colors_rgb = [(int(color) & 0xff, (int(color) >> 8) & 0xff, (int(color) >> 16) & 0xff) for color in colors]
+    point_cloud.colors = o3d.utility.Vector3dVector(np.asarray(colors_rgb) / 255.0)
+    '''
+
 def pointcloud2_to_array(pointcloud2: PointCloud2) -> tuple:
     """
     Convert a ROS PointCloud2 message to a numpy array.
@@ -144,32 +131,6 @@ def pointcloud2_to_array(pointcloud2: PointCloud2) -> tuple:
     return xyz, rgb
     """
     pass
-
-#Для облака точек
-class Depth_Subscriber(Node):
-    def __init__(self):
-        super().__init__('depth_subscriber')
-        Qos_profile = QoSProfile(
-            reliability=QoSReliabilityPolicy.RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT,
-            history=QoSHistoryPolicy.RMW_QOS_POLICY_HISTORY_KEEP_LAST,
-            depth=5
-        )
-        self.subscription = self.create_subscription(
-            PointCloud2,
-            '/camera/depth_registered/points',
-            self.depth_callback,
-            qos_profile=Qos_profile)
-        self.subscription  # prevent unused variable warning
-    def depth_callback(self, msg):
-        self.get_logger().info('Depth Image')
-        ##xyz, rgb = pointcloud2_to_array(ros_cloud)
-        pcd = pointcloud2_to_open3d(msg)
-        '''
-        Pcd = o3d.geometry.PointCloud()
-        pcd.points = o3d.utility.Vector3dVector(xyz)
-        pcd.colors = o3d.utility.Vector3dVector(rgb)
-        '''
-        o3d.visualization.draw_geometries([pcd])
 
 #Синхронизация двух топиков
 class Multiply_Subscriber(Node):
@@ -195,9 +156,7 @@ class Multiply_Subscriber(Node):
         self.ts.registerCallback(self.multi_callback)
         self.vis = o3d.visualization.Visualizer()
         self.vis.create_window(height=480, width=640)
-        self.pcd = o3d.geometry.PointCloud()
-        self.vis.add_geometry(self.pcd)
-
+        self.vis.add_geometry(o3d.geometry.PointCloud())
 
     def multi_callback(self, img_msg, dep_msg):
         self.get_logger().info('Multi msg')
@@ -207,20 +166,12 @@ class Multiply_Subscriber(Node):
         
         recognize(image_np)
 
-
-        self.pcd = pointcloud2_to_open3d(dep_msg)
-        #self.pcd.points.extend(pointcloud2_to_open3d(dep_msg))
         self.vis.clear_geometries()
-        #self.vis.update_geometry(self.pcd)
-        self.vis.add_geometry(self.pcd)
+        self.vis.add_geometry(pointcloud2_to_open3d(dep_msg))
+        self.vis.get_view_control().change_field_of_view(self.vis.get_view_control().get_field_of_view() +30)
+        print("Field of view (after changing) %.2f" % self.vis.get_view_control().get_field_of_view())
         self.vis.poll_events()
         self.vis.update_renderer()
-
-        #o3d.visualization.draw_geometries([pcd])
-
-
-
-
 
     def destroy_node(self):
         self.image_sub.destroy()
@@ -232,23 +183,15 @@ class Multiply_Subscriber(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-
-    #image_subscriber = ImageSubscriber()
-    #depth_subscriber = Depth_Subscriber() 
     multi_sub = Multiply_Subscriber()
 
-    #rclpy.spin(image_subscriber)
-    #rclpy.spin(depth_subscriber)
-
-
     rclpy.spin(multi_sub)
-    
-    #image_subscriber.destroy_node()
-    #depth_subscriber.destroy_node()
-
+   
     multi_sub.destroy_node()
     rclpy.shutdown()
 
+if __name__ == '__main__':
+    main()
 
 if __name__ == '__main__':
     main()
