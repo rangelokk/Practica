@@ -27,3 +27,39 @@ https://develop-nil.com/kak-sozdat-svoj-sobstvennyj-object-detector/
 https://docs.ultralytics.com/ru/yolov5/tutorials/train_custom_data/#supported-environments
 14) Инфа про YoloV3 на Гикс
 https://www.geeksforgeeks.org/yolov3-from-scratch-using-pytorch/
+
+Старый ImageNode:
+```
+class ImageSubscriber(Node):
+    i =0
+    framerate = 7
+    def __init__(self):
+        super().__init__('image_subscriber')
+        Qos_profile = QoSProfile(
+            reliability=QoSReliabilityPolicy.RMW_QOS_POLICY_RELIABILITY_RELIABLE,
+            history=QoSHistoryPolicy.RMW_QOS_POLICY_HISTORY_KEEP_LAST,
+            depth=5
+        )
+        self.subscription = self.create_subscription(
+            Image,
+            '/camera/rgb/image_raw',
+            self.image_callback,
+            qos_profile=Qos_profile)
+        self.subscription  # prevent unused variable warning
+    def image_callback(self, msg):
+        self.get_logger().info('Image msg')
+  
+        bridge = CvBridge()
+        image_np = bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
+        
+        recognize(image_np)
+
+        cv2.imshow("img", image_np)
+        '''
+        Для съемок
+        if(self.i%self.framerate==0):
+            cv2.imwrite('/home/mlserver/dataset/m2_Sponge/ms2'+str(self.i/self.framerate)+'.png', image_np)
+        self.i += 1
+        '''
+        cv2.waitKey(1)
+```
