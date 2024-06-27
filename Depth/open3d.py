@@ -210,7 +210,9 @@ class Multiply_Subscriber(Node):
 
         self.pcd = pointcloud2_to_open3d(dep_msg)
         #self.pcd.points.extend(pointcloud2_to_open3d(dep_msg))
-        self.vis.update_geometry(self.pcd)
+        self.vis.clear_geometries()
+        #self.vis.update_geometry(self.pcd)
+        self.vis.add_geometry(self.pcd)
         self.vis.poll_events()
         self.vis.update_renderer()
 
