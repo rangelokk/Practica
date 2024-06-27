@@ -127,3 +127,32 @@ segment_and_save_images(input_folder, output_folder)
 #и что вы дополните функцию segment_and_save_images соответствующим кодом для сегментации изображений.
 
 ```
+5) Новая попытка кода
+```
+import cv2
+
+def segment_image(image):
+    # Пример сегментации изображения с использованием OpenCV
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    _, binary_image = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+#нижнее подчеркивание - это такое название переменной, всё норм!
+
+    return binary_image
+
+# Принимаем облако точек и проводим сегментацию изображения
+def segment_pointcloud(data):
+    point_cloud = pointcloud2_to_open3d(data)
+    
+    # Преобразование point_cloud в изображение (предположим, что требуется RGB изображение)
+    image = np.asarray(point_cloud.colors).reshape(-1, 1, 3)
+    image = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_RGB2BGR)
+
+    # Вызываем функцию для сегментации изображения
+    segmented_image = segment_image(image)
+
+    return segmented_image
+
+# Пример использования функции для сегментации изображения из облака точек
+data = # ваше облако точек
+segmented_image = segment_pointcloud(data)
+```
