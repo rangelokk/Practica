@@ -4,23 +4,32 @@ https://github.com/IntelRealSense/realsense-ros/issues/1342
 https://github.com/mgonzs13/ros2_asus_xtion
 
 https://stackoverflow.com/questions/65774814/adding-new-points-to-point-cloud-in-real-time-open3d
+Старый DepthNode:
 ```
-self.vis = o3d.visualization.Visualizer()
-self.vis.create_window(height=480, width=640)
-self.pcd = o3d.geometry.PointCloud()
-self.vis.add_geometry(self.pcd)
-
-def multi_callback(self, img_msg, dep_msg):
-        self.get_logger().info('Multi msg')
-  
-        bridge = CvBridge()
-        image_np = bridge.imgmsg_to_cv2(img_msg, desired_encoding="bgr8")
-        
-        recognize(image_np)
-
-        self.pcd = pointcloud2_to_open3d(dep_msg)
-        #self.pcd.points.extend(pointcloud2_to_open3d(dep_msg))
-        self.vis.update_geometry(self.pcd)
-        self.vis.poll_events()
-        self.vis.update_renderer()
+#Для облака точек
+class Depth_Subscriber(Node):
+    def __init__(self):
+        super().__init__('depth_subscriber')
+        Qos_profile = QoSProfile(
+            reliability=QoSReliabilityPolicy.RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT,
+            history=QoSHistoryPolicy.RMW_QOS_POLICY_HISTORY_KEEP_LAST,
+            depth=5
+        )
+        self.subscription = self.create_subscription(
+            PointCloud2,
+            '/camera/depth_registered/points',
+            self.depth_callback,
+            qos_profile=Qos_profile)
+        self.subscription  # prevent unused variable warning
+    def depth_callback(self, msg):
+        self.get_logger().info('Depth Image')
+        ##xyz, rgb = pointcloud2_to_array(ros_cloud)
+        pcd = pointcloud2_to_open3d(msg)
+        '''
+        Pcd = o3d.geometry.PointCloud()
+        pcd.points = o3d.utility.Vector3dVector(xyz)
+        pcd.colors = o3d.utility.Vector3dVector(rgb)
+        '''
+        o3d.visualization.draw_geometries([pcd])
 ```
+
