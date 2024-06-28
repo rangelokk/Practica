@@ -1,6 +1,24 @@
 # Practica
 Ведем дневник практики  
 Переговорная:
+```
+segmented_pc = o3d.geometry.PointCloud()
+        segmented_images = recognize(image_np)
+        if(len(segmented_images)!=0):
+            for im in segmented_images:
+                mini_pc = pcd.crop(im)
+                segmented_pc += mini_pc
+```
+```
+TypeError: crop(): incompatible function arguments. The following argument types are supported:
+    1. (self: open3d.cuda.pybind.geometry.PointCloud, bounding_box: open3d::geometry::AxisAlignedBoundingBox, invert: bool = False) -> open3d.cuda.pybind.geometry.PointCloud
+    2. (self: open3d.cuda.pybind.geometry.PointCloud, bounding_box: open3d::geometry::OrientedBoundingBox, invert: bool = False) -> open3d.cuda.pybind.geometry.PointCloud
+
+Invoked with: PointCloud with 137624 points., array([[[0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+        ...,
+```
 
 1) Попробовать еще раз код на вращение в Open3D:  
 ```
