@@ -6,18 +6,31 @@ segmented_pc = o3d.geometry.PointCloud()
         segmented_images = recognize(image_np)
         if(len(segmented_images)!=0):
             for im in segmented_images:
-                mini_pc = pcd.crop(im)
-                segmented_pc += mini_pc
-```
-```
-TypeError: crop(): incompatible function arguments. The following argument types are supported:
-    1. (self: open3d.cuda.pybind.geometry.PointCloud, bounding_box: open3d::geometry::AxisAlignedBoundingBox, invert: bool = False) -> open3d.cuda.pybind.geometry.PointCloud
-    2. (self: open3d.cuda.pybind.geometry.PointCloud, bounding_box: open3d::geometry::OrientedBoundingBox, invert: bool = False) -> open3d.cuda.pybind.geometry.PointCloud
+                #mini_pc = pcd.crop(im)
+                #segmented_pc += mini_pc
+                indices_to_select = get_indice_from_segmented_image(im)
+                if(len(indices_to_select)!=0):
+                    selected_points = pcd.select_by_index(indices_to_select)
+                    segmented_pc += selected_points
+                    print("a")
 
-Invoked with: PointCloud with 137624 points., array([[[0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0],
-        ...,
+        self.vis.clear_geometries()
+        
+        pcd.transform([[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0, 0, 0, 1]])
+
+        if(len(segmented_images)==0 or len(segmented_pc.points) == 0):
+            self.vis.add_geometry(pcd)
+        else:
+            self.vis.add_geometry(segmented_pc)
+
+        #print("Field of view (after changing) %.2f" % self.vis.get_view_control().get_rotate())
+        self.vis.reset_view_point()
+        self.vis.poll_events()
+        self.vis.update_renderer()
+```
+```
+corrupted double-linked list (not small)
+Aborted (core dumped)
 ```
 
 1) Попробовать еще раз код на вращение в Open3D:  
