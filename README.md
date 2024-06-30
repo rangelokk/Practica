@@ -33,85 +33,7 @@ corrupted double-linked list (not small)
 Aborted (core dumped)
 ```
 
-3) Попытка в сегментацию, первый блин комом :(  
-```
-import os
-import cv2
-import open3d as o3d
-import numpy as np
-from cv_bridge import CvBridge
-from sensor_msgs_py import point_cloud2
-
-def segment_and_visualize_images_from_pointcloud(pointcloud_data, segmented_images_folder):
-    field_names = [field.name for field in pointcloud_data.fields]
-    cloud_data = list(point_cloud2.read_points(pointcloud_data, skip_nans=True, field_names=field_names))
-    xyz = [(x, y, z) for x, y, z, rgb in cloud_data]
-
-    # Сегментация изображений из папки
-    segmented_images = []
-    for filename in os.listdir(segmented_images_folder):
-        if filename.endswith(".png"):
-            image_path = os.path.join(segmented_images_folder, filename)
-            segmented_image = cv2.imread(image_path)
-            segmented_images.append(segmented_image)
-
-    # Процесс сегментации изображений и облака точек
-    # Ваш код для сегментации изображений и облака точек
-
-    # Визуализация сегментированных изображений и облака точек
-    vis = o3d.visualization.Visualizer()
-    vis.create_window()
-    
-    # Добавление облака точек в окно
-    point_cloud = o3d.geometry.PointCloud()
-    point_cloud.points = o3d.utility.Vector3dVector(np.array(xyz))
-    vis.add_geometry(point_cloud)
-
-    # Добавление сегментированных изображений в окно
-    for segmented_image in segmented_images:
-        # Ваш код для добавления сегментированных изображений в окно визуализации
-
-    # Отображение окна визуализации
-    vis.run()
-    vis.destroy_window()
-```
-4) Еще одна проба сегментации
-```
-import os
-import cv2
-
-def segment_and_save_images(input_folder, output_folder):
-    # Создание выходной папки, если она не существует
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
-
-    for filename in os.listdir(input_folder):
-        if filename.endswith(".png"):
-            image_path = os.path.join(input_folder, filename)
-            segmented_image = cv2.imread(image_path)
-
-            # Ваш код для сегментации изображения
-            # Например, используйте алгоритмы компьютерного зрения или нейронные сети для сегментации
-
-            # Сохранение сегментированного изображения в выходную папку
-            output_path = os.path.join(output_folder, filename)
-            cv2.imwrite(output_path, segmented_image)
-
-    print("Сегментация и сохранение завершены.")
-
-# Путь к папке с исходными изображениями
-input_folder = "/home/mlserver/dataset/Segmented"
-# Путь к папке для сохранения сегментированных изображений
-output_folder = "/path/to/output/folder"
-
-# Вызов функции для сегментации и сохранения изображений
-segment_and_save_images(input_folder, output_folder)
-
-#Прежде чем использовать этот код, убедитесь, что у вас есть необходимые библиотеки (например, OpenCV)
-#и что вы дополните функцию segment_and_save_images соответствующим кодом для сегментации изображений.
-
-```
-5) Новая попытка кода
+1) Новая попытка кода
 ```
 import cv2
 
@@ -140,7 +62,7 @@ def segment_pointcloud(data):
 data = # ваше облако точек
 segmented_image = segment_pointcloud(data)
 ```
-6) Буду делать больше попыток!!!
+2) Буду делать больше попыток!!!
 ```
 import rclpy
 import open3d as o3d
@@ -155,7 +77,7 @@ import cv2
 def segment_and_visualize_pointcloud(data):
     point_cloud = pointcloud2_to_open3d(data)
     
-    # Преобразование point_cloud в изображение (предположим, что требуется RGB изображение)
+    # **Преобразование point_cloud в изображение (предположим, что требуется RGB изображение)**
     image = np.asarray(point_cloud.colors).reshape(-1, 1, 3)
     image = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_RGB2BGR)
 
@@ -178,52 +100,11 @@ data = # ваше облако точек
 segment_and_visualize_pointcloud(data)
 #Пожалуйста, убедитесь, что вы передаете правильные данные в функцию segment_and_visualize_pointcloud, и что данные соответствуют ожидаемому формату для корректной работы функции.
 ```
-7) Аанг не сдался - и я не сдамся!
-Для выполнения задачи сегментации изображения, которое появляется на экране в результате отработки функции, вам нужно будет загрузить и обработать это изображение, а затем сопоставить его с другими сегментированными изображениями.
+
 ```
-import os
-import cv2
-import open3d as o3d
+**3) Для сегментации изображений, полученных с RGBD-камеры с помощью библиотек open3d, point_cloud2 и rclpy, вы можете использовать следующий подход:**
 
-def segment_and_match(segmented_image_path):
-    # Загрузка изображения для сегментации
-    image = cv2.imread(segmented_image_path)
-
-    # Сегментация изображения (пример)
-    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    _, binary_image = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-
-    # Загрузка других сегментированных изображений для сопоставления (пример)
-    segmented_images_folder = '/home/mlserver/dataset/Segmented'
-    segmented_images = []
-    for filename in os.listdir(segmented_images_folder):
-        if filename.endswith('.png'):
-            segmented_image = cv2.imread(os.path.join(segmented_images_folder, filename))
-            segmented_images.append(segmented_image)
-
-    # Сопоставление сегментированного изображения с другими изображениями (пример)
-    for seg_img in segmented_images:
-        # Действия по сопоставлению изображений
-        pass
-
-    # Отображение результатов в окне Open3D
-    vis = o3d.visualization.Visualizer()
-    vis.create_window()
-    
-    # Добавление вашего изображения и других сегментированных изображений в окно Open3D
-    vis.add_geometry(o3d.geometry.Image(image))
-    for seg_img in segmented_images:
-        vis.add_geometry(o3d.geometry.Image(seg_img))
-
-    vis.run()
-
-# Пример использования функции для сегментации и сопоставления изображения
-segmented_image_path = '/path/to/your/image.png'
-segment_and_match(segmented_image_path)
-```
-**8) Для сегментации изображений, полученных с RGBD-камеры с помощью библиотек open3d, point_cloud2 и rclpy, вы можете использовать следующий подход:
-
-1. Преобразуйте изображения RGBD в RGB изображение.
+**1. Преобразуйте изображения RGBD в RGB изображение.
 2. Примените алгоритм сегментации, например, на основе цвета или глубины, для каждого RGB изображения.
 3. Сопоставьте сегментированные изображения с уже имеющимися сегментированными изображениями.**
 
