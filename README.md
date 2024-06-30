@@ -3,6 +3,7 @@
 Переговорная:
 
 ССЫЛКИ:  
+- https://www.open3d.org/html/tutorial/Basic/pointcloud.html
 - https://github.com/noshluk2/Point-Cloud-Segmentaion-PCL-and-Open3D/tree/main/Python_Open3D  
 Код для сегментации, в целом совпадает с тем, что я пыталась написать сама.  
 
