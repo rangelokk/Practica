@@ -47,7 +47,7 @@ import cv2
 # Функция для сегментации изображения и вывода результата в окне Open3D
 def segment_and_visualize_pointcloud(data):
     point_cloud = pointcloud2_to_open3d(data)
-    # Преобразование point_cloud в изображение (предположим, что требуется RGB изображение)
+    # Преобразование point_cloud в RGB изображение
     image = np.asarray(point_cloud.colors).reshape(-1, 1, 3)
     image = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_RGB2BGR)
 
