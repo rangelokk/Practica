@@ -3,7 +3,8 @@
 Переговорная:
 
 ССЫЛКИ:  
-- https://www.open3d.org/html/tutorial/Basic/pointcloud.html
+- https://www.open3d.org/html/tutorial/Basic/pointcloud.html  
+(может, binary_image - это тот самый файл .json для crop из этой документации?)  
 - https://github.com/noshluk2/Point-Cloud-Segmentaion-PCL-and-Open3D/tree/main/Python_Open3D  
 Код для сегментации, в целом совпадает с тем, что я пыталась написать сама.  
 
@@ -14,14 +15,14 @@ import cv2
 
 def segment_image(image):
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    _, binary_image = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU) #нижнее подчеркивание - это такое название переменной, всё норм!
+    _, binary_image = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU) 
 
     return binary_image
 
 # Принимаем облако точек и проводим сегментацию изображения
 def segment_pointcloud(data):
     point_cloud = pointcloud2_to_open3d(data)
-    # **Преобразование point_cloud в изображение (предположим, что требуется RGB изображение)**
+    # Преобразование point_cloud в RGB изображение
     image = np.asarray(point_cloud.colors).reshape(-1, 1, 3)
     image = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_RGB2BGR)
 
@@ -30,8 +31,7 @@ def segment_pointcloud(data):
 
     return segmented_image
 
-# Пример использования функции для сегментации изображения из облака точек
-data = # ваше облако точек
+data = # облако точек
 segmented_image = segment_pointcloud(data)
 ```
 
@@ -47,7 +47,7 @@ import cv2
 # Функция для сегментации изображения и вывода результата в окне Open3D
 def segment_and_visualize_pointcloud(data):
     point_cloud = pointcloud2_to_open3d(data)
-    # **Преобразование point_cloud в изображение (предположим, что требуется RGB изображение)**
+    # Преобразование point_cloud в изображение (предположим, что требуется RGB изображение)
     image = np.asarray(point_cloud.colors).reshape(-1, 1, 3)
     image = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_RGB2BGR)
 
