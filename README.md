@@ -12,7 +12,6 @@
 import cv2
 
 def segment_image(image):
-    # Пример сегментации изображения с использованием OpenCV
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     _, binary_image = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU) #нижнее подчеркивание - это такое название переменной, всё норм!
 
@@ -25,8 +24,8 @@ def segment_pointcloud(data):
     image = np.asarray(point_cloud.colors).reshape(-1, 1, 3)
     image = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_RGB2BGR)
 
-    #Вызываем функцию для сегментации изображения
-    segmented_image = segment_image(image)
+    # Вызываем функцию для сегментации изображения
+    segmented_image = segment_image(image) # надо устанавливать: pip install segment-image
 
     return segmented_image
 
@@ -70,50 +69,7 @@ segment_and_visualize_pointcloud(data)
 
 ```
 
-3) Для сегментации изображений, полученных с RGBD-камеры с помощью библиотек open3d, point_cloud2 и rclpy, вы можете использовать следующий подход:
-
-1. Преобразуйте изображения RGBD в RGB изображение.
-2. Примените алгоритм сегментации, например, на основе цвета или глубины, для каждого RGB изображения.
-3. Сопоставьте сегментированные изображения с уже имеющимися сегментированными изображениями.
-
-```
-import cv2
-import open3d as o3d
-
-def segment_image(rgb_image):
-    # **Преобразование RGB изображения в формат OpenCV**
-    rgb_image_cv = cv2.cvtColor(rgb_image, cv2.COLOR_RGB2BGR)
-    # Применение алгоритма сегментации (например, на основе цвета)
-    gray_image = cv2.cvtColor(rgb_image_cv, cv2.COLOR_BGR2GRAY)
-    _, binary_image = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    return binary_image
-
-segmented_image = segment_image(image_rgb)
-
-cv2.imshow('Segmented Image', segmented_image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-```
-Для сопоставления сегментированных изображений с уже имеющимися сегментированными изображениями можно использовать различные методы, в зависимости от ваших конкретных требований. Один из подходов — использование алгоритма сопоставления особых точек (например, SIFT, SURF, ORB) для нахождения соответствий между изображениями. 
-
-```
-import cv2
-
-def match_segmented_images(segmented_image1, segmented_image2):
-    detector = cv2.ORB_create()
-    keypoints1, descriptors1 = detector.detectAndCompute(segmented_image1, None)
-    keypoints2, descriptors2 = detector.detectAndCompute(segmented_image2, None)
-    matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-    matches = matcher.match(descriptors1, descriptors2)
-    matched_image = cv2.drawMatches(segmented_image1, keypoints1, segmented_image2, keypoints2, matches, None)
-    return matched_image
-matched_result = match_segmented_images(segmented_image1, segmented_image2)
-cv2.imshow('Matched Result', matched_result)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-```
-
-4) Сегментация облака точек с использованием библиотеки Open3D
+3) Сегментация облака точек с использованием библиотеки Open3D
 ```
 import rclpy
 import open3d as o3d
@@ -132,9 +88,6 @@ def segment_point_cloud(point_cloud):
     pcd.colors = o3d.utility.Vector3dVector(colors[:, :3]) # Отображение результата сегментации во всплывающем окне Open3D
     o3d.visualization.draw_geometries([pcd])
 
-# Пример использования функции для сегментации облака точек
-# Предположим, у вас есть переменная point_cloud, содержащая данные облака точек
-# Сегментация облака точек
 segment_point_cloud(point_cloud)
 ```
 
@@ -159,4 +112,3 @@ cv2.imshow("Segmented Image", segmented_image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
-
