@@ -80,13 +80,13 @@ from sensor_msgs_py import point_cloud2
 import cv2
 
 def segment_point_cloud(point_cloud):
-    points = np.array(point_cloud.data) # Преобразование облака точек в формат numpy
-    pcd = o3d.geometry.PointCloud() # Создание объекта для представления облака точек в Open3D
-    pcd.points = o3d.utility.Vector3dVector(points) # Сегментация облака точек с использованием метода кластеризации
+    points = np.array(point_cloud.data)                     # Преобразование облака точек в формат numpy
+    pcd = o3d.geometry.PointCloud()                         # Создание объекта для представления облака точек в Open3D
+    pcd.points = o3d.utility.Vector3dVector(points)         # Сегментация облака точек с использованием метода кластеризации
     labels = np.array(pcd.cluster_dbscan(eps=0.02, min_points=10, print_progress=True)) # Присвоение случайных цветов каждому кластеру для визуализации
     max_label = labels.max()
-    colors = plt.cm.get_cmap("tab20")(labels / (max_label if max_label > 0 else 1)) # Применение цветов к точкам
-    pcd.colors = o3d.utility.Vector3dVector(colors[:, :3]) # Отображение результата сегментации во всплывающем окне Open3D
+    colors = plt.cm.get_cmap("tab20")(labels / (max_label if max_label > 0 else 1))     # Применение цветов к точкам
+    pcd.colors = o3d.utility.Vector3dVector(colors[:, :3])                              # Отображение результата сегментации во всплывающем окне Open3D
     o3d.visualization.draw_geometries([pcd])
 
 segment_point_cloud(point_cloud)
