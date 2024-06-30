@@ -1,37 +1,7 @@
 # Practica
 Ведем дневник практики  
 Переговорная:
-```
-segmented_pc = o3d.geometry.PointCloud()
-        segmented_images = recognize(image_np)
-        if(len(segmented_images)!=0):
-            for im in segmented_images:
-                #mini_pc = pcd.crop(im)
-                #segmented_pc += mini_pc
-                indices_to_select = get_indice_from_segmented_image(im)
-                if(len(indices_to_select)!=0):
-                    selected_points = pcd.select_by_index(indices_to_select)
-                    segmented_pc += selected_points
-                    print("a")
 
-        self.vis.clear_geometries()
-        
-        pcd.transform([[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0, 0, 0, 1]])
-
-        if(len(segmented_images)==0 or len(segmented_pc.points) == 0):
-            self.vis.add_geometry(pcd)
-        else:
-            self.vis.add_geometry(segmented_pc)
-
-        #print("Field of view (after changing) %.2f" % self.vis.get_view_control().get_rotate())
-        self.vis.reset_view_point()
-        self.vis.poll_events()
-        self.vis.update_renderer()
-```
-```
-corrupted double-linked list (not small)
-Aborted (core dumped)
-```
 
 1) Новая попытка кода
 ```
@@ -164,5 +134,25 @@ def segment_point_cloud(point_cloud):
 segment_point_cloud(point_cloud)
 ```
 
+5) Сегментация
+```
+import open3d as o3d
+import cv2
+import numpy as np
 
+# Загрузка облака точек point_cloud2
+point_cloud2 = o3d.io.read_point_cloud("point_cloud2.ply")
+
+# Преобразование изображения RGBD в изображение RGB с использованием Open3D
+rgbd_image = o3d.geometry.RGBDImage.create_from_point_cloud_pcl(point_cloud2, camera_intrinsic)
+rgb_image = rgbd_image.color
+
+# Преобразование изображения RGB в формат OpenCV для дальнейшей обработки
+rgb_image_cv2 = np.asarray(rgb_image)
+rgb_image_cv2 = cv2.cvtColor(rgb_image_cv2, cv2.COLOR_RGB2BGR)
+
+cv2.imshow("Segmented Image", segmented_image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
 
