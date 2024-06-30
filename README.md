@@ -9,6 +9,8 @@
 Код для сегментации, в целом совпадает с тем, что я пыталась написать сама.  
 - https://github.com/rangelokk/Practica/blob/main/Segmentation_Pointcloud2/code.py
 Попробовала написать bounding box, хотя бы для вдохновения к первой ссылке документации
+- https://github.com/isl-org/Open3D/blob/main/examples/python/geometry/point_cloud_crop.py  
+Crop Geometry  
 
 1) Новая попытка кода
 ```
