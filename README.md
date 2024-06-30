@@ -92,7 +92,7 @@ def segment_point_cloud(point_cloud):
 segment_point_cloud(point_cloud)
 ```
 
-5) Сегментация
+4) Сегментация
 ```
 import open3d as o3d
 import cv2
