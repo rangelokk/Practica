@@ -2,6 +2,10 @@
 Ведем дневник практики  
 Переговорная:
 
+[x] ССЫЛКИ:
+1) https://github.com/noshluk2/Point-Cloud-Segmentaion-PCL-and-Open3D/tree/main/Python_Open3D
+Код для сегментации, в целом совпадает с тем, что я пыталась написать сама.
+
 
 1) Новая попытка кода
 ```
