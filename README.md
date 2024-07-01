@@ -1,7 +1,16 @@
 # Practica
 Ведем дневник практики  
 Переговорная:
-
+```
+def Cropinng(im, pc):
+    inc_point= []
+    for point in np.array(pc.points):
+        for i in range(im.shape[0]):
+            for j in range(im.shape[1]):
+                if np.any(im[i,j]) != 0 and i == any(point[0]) and j == any(point[1]): 
+                    inc_point.append(point)
+    return inc_point
+```
 ССЫЛКИ:  
 - https://www.open3d.org/html/tutorial/Basic/pointcloud.html  
 (может, binary_image - это тот самый файл .json для crop из этой документации?)  
