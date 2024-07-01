@@ -2,17 +2,33 @@
 Ведем дневник практики  
 Переговорная:
 ```
-def Cropinng(im, pc):
-    inc_point = []
-    non_zero_indices = np.argwhere(im != 0)
-    print("ДЕТЕКТИРОВАЛ И НАРЕЗАЛ " + str(len(non_zero_indices)))
-    
-    for point in np.array(pc.points):
-        matching_points = np.array(pc.points)[(non_zero_indices[:, 0] == point[0]) & (non_zero_indices[:, 1] == point[1])]
-        for match in matching_points:
-            inc_point.append(tuple(match))
-    
-    return matching_points
+import numpy as np
+import open3d as o3d
+
+def FilterPointCloudByImage(pc, im):
+    non_black_indices = np.argwhere(np.all(im != [0, 0, 0], axis=-1))  # Находим индексы не черных точек на изображении
+
+    filtered_points = []
+    for index in non_black_indices:
+        x = index[1]
+        y = index[0]
+
+        # Фильтруем точки облака по координатам x и y
+        for point in np.asarray(pc.points):
+            if int(point[0]) == x and int(point[1]) == y:
+                filtered_points.append(point)
+
+    # Создаем новое облако точек Open3D
+    filtered_pc = o3d.geometry.PointCloud()
+    filtered_pc.points = o3d.utility.Vector3dVector(filtered_points)
+
+    return filtered_pc
+
+# Пример использования функции
+# Здесь pc - облако точек, im - изображение
+filtered_pc = FilterPointCloudByImage(pc, im)
+o3d.visualization.draw_geometries([filtered_pc])
+
 
 ```
 ССЫЛКИ:  
