@@ -2,19 +2,17 @@
 Ведем дневник практики  
 Переговорная:
 ```
-
-import numpy as np
-
 def Cropinng(im, pc):
     inc_point = []
     non_zero_indices = np.argwhere(im != 0)
+    print("ДЕТЕКТИРОВАЛ И НАРЕЗАЛ " + str(len(non_zero_indices)))
     
     for point in np.array(pc.points):
-        matching_points = non_zero_indices[(non_zero_indices[:, 0] == point[0]) & (non_zero_indices[:, 1] == point[1])]
+        matching_points = np.array(pc.points)[(non_zero_indices[:, 0] == point[0]) & (non_zero_indices[:, 1] == point[1])]
         for match in matching_points:
             inc_point.append(tuple(match))
     
-    return inc_point
+    return matching_points
 
 ```
 ССЫЛКИ:  
