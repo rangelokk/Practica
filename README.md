@@ -2,14 +2,20 @@
 Ведем дневник практики  
 Переговорная:
 ```
+
+import numpy as np
+
 def Cropinng(im, pc):
-    inc_point= []
+    inc_point = []
+    non_zero_indices = np.argwhere(im != 0)
+    
     for point in np.array(pc.points):
-        for i in range(im.shape[0]):
-            for j in range(im.shape[1]):
-                if np.any(im[i,j]) != 0 and i == any(point[0]) and j == any(point[1]): 
-                    inc_point.append(point)
+        matching_points = non_zero_indices[(non_zero_indices[:, 0] == point[0]) & (non_zero_indices[:, 1] == point[1])]
+        for match in matching_points:
+            inc_point.append(tuple(match))
+    
     return inc_point
+
 ```
 ССЫЛКИ:  
 - https://www.open3d.org/html/tutorial/Basic/pointcloud.html  
