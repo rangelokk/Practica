@@ -1,7 +1,8 @@
 # Practica
 Ведем дневник практики  
 Переговорная:
-https://github.com/klintan/ros2_usb_camera
+https://github.com/MarSpit/LiDAR_camera_calibration_tool  
+
 ССЫЛКИ:  
 - https://www.open3d.org/html/tutorial/Basic/pointcloud.html  
 (может, binary_image - это тот самый файл .json для crop из этой документации?)  
