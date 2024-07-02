@@ -1,36 +1,7 @@
 # Practica
 Ведем дневник практики  
 Переговорная:
-```
-import numpy as np
-import open3d as o3d
-
-def FilterPointCloudByImage(pc, im):
-    non_black_indices = np.argwhere(np.all(im != [0, 0, 0], axis=-1))  # Находим индексы не черных точек на изображении
-
-    filtered_points = []
-    for index in non_black_indices:
-        x = index[1]
-        y = index[0]
-
-        # Фильтруем точки облака по координатам x и y
-        for point in np.asarray(pc.points):
-            if int(point[0]) == x and int(point[1]) == y:
-                filtered_points.append(point)
-
-    # Создаем новое облако точек Open3D
-    filtered_pc = o3d.geometry.PointCloud()
-    filtered_pc.points = o3d.utility.Vector3dVector(filtered_points)
-
-    return filtered_pc
-
-# Пример использования функции
-# Здесь pc - облако точек, im - изображение
-filtered_pc = FilterPointCloudByImage(pc, im)
-o3d.visualization.draw_geometries([filtered_pc])
-
-
-```
+https://github.com/klintan/ros2_usb_camera
 ССЫЛКИ:  
 - https://www.open3d.org/html/tutorial/Basic/pointcloud.html  
 (может, binary_image - это тот самый файл .json для crop из этой документации?)  
