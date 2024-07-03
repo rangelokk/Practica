@@ -3,6 +3,8 @@
 Переговорная:
 https://github.com/MarSpit/LiDAR_camera_calibration_tool  
 
+https://gist.github.com/hanifmb/c585ca2e84f2a0986adfa2dd4ccc6323  
+
 ССЫЛКИ:  
 - https://www.open3d.org/html/tutorial/Basic/pointcloud.html  
 (может, binary_image - это тот самый файл .json для crop из этой документации?)  
