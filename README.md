@@ -1,6 +1,8 @@
 # Practica
 Ведем дневник практики  
 Переговорная:
+https://github.com/kanaek/Kinect-ASUS-Xtion-Pro-Live-Calibration-Tutorials  
+
 https://github.com/MarSpit/LiDAR_camera_calibration_tool  
 
 https://gist.github.com/hanifmb/c585ca2e84f2a0986adfa2dd4ccc6323  
