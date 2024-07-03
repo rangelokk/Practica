@@ -234,7 +234,7 @@ class Multiply_Subscriber(Node):
                     #selected_points = pcd.select_by_index(indices_to_select)
                     bounding_box = indices_to_select.get_oriented_bounding_box()
                     print("Bounding_Box: " + str(bounding_box.get_center()))
-                    obb = indices_to_select.get_oriented_bounding_box()
+                    obb = indices_to_select.get_minimal_oriented_bounding_box()
                     obb.color = [1.0, 0.0, 0.0]
                     o3d.visualization.draw_geometries([indices_to_select, obb])
                     #self.vis.add_geometry(bounding_box)
