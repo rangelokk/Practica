@@ -1,6 +1,5 @@
 # Practica
 Ведем дневник практики  
-Переговорная:
 https://docs.ros.org/en/rolling/How-To-Guides/Launch-file-different-formats.html
 https://github.com/MarSpit/LiDAR_camera_calibration_tool    
 
