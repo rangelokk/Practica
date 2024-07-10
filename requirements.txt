@@ -9,3 +9,6 @@ openni2-camera==2.0.2
 sensor-msgs==4.2.3
 sensor-msgs-py==4.2.3
 std-msgs==4.2.3
+Operating System: Ubuntu 22.04.4 LTS              
+Kernel: Linux 6.5.0-41-generic
+Architecture: x86-64
